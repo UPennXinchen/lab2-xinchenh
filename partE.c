@@ -48,9 +48,9 @@ void Initialize()
 	PORTB &=~(1<<PORTB1);
 	
 	//timer1 setup, clkI/O/1024 (from prescaler)
-	TCCR1B |= (1<<CS00);
-	TCCR1B &= ~(1<<CS01);
-	TCCR1B |= (1<<CS02);
+	TCCR1B |= (1<<CS10);
+	TCCR1B &= ~(1<<CS11);
+	TCCR1B |= (1<<CS12);
 	
 	TCCR1A &= ~(1<<WGM10);
 	TCCR1A &= ~(1<<WGM11);
