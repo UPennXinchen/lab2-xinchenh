@@ -128,19 +128,10 @@ ISR(TIMER1_CAPT_vect)
 		period = 0;
 		
 	}
-	while ((flag==0)&&((TCNT1-edge2)>6250))
-	{
-		sprintf(String," ");
-		UART_putstring(String);
-		for(int a=0; a<5; a++)
-		{
-			Morse[a] = 2;
-			judge[a] = 0;
-		}
-		read = 0;
-		_delay_ms(2000);
-		
-	}
+	
+	
+
+	
 
 //	sprintf(String2,"period is %u \n",period);
 //	UART_putstring(String2);
@@ -148,6 +139,32 @@ ISR(TIMER1_CAPT_vect)
 
 }
 
+void output_Characters()
+{
+	for(int i=0;i<36;i++)
+	{
+		for(int j=0;j<5;j++)
+		{
+			if(Morse[j] == input_table[i][j])
+			{
+				judge[j]=1;
+				while(judge[0]&&judge[1]&&judge[2]&&judge[3]&&judge[4])//check every unit in the Morse that matches one of the elements in the input_table
+				{
+					printf(output_table[i]);
+					UART_putstring(output_table[i]);
+					_delay_ms(1000);
+					
+					for(int a=0; a<5; a++)
+					{
+						Morse[a] = 2;
+						judge[a] = 0;
+					}
+					read = 0;
+				}
+			}
+		}
+	}
+}
 
 
 int main(void)
@@ -160,25 +177,20 @@ int main(void)
 	
     while (1)
     {
-		
-		for(int i=0;i<36;i++)
+		output_Characters();
+		if ((flag==0)&&((TCNT1-edge2)>6250))
 		{
-			for(int j=0;j<5;j++)
+			sprintf(String," ");
+			UART_putstring(String);
+			for(int a=0; a<5; a++)
 			{
-				if(Morse[j] == input_table[i][j])
-				{
-					judge[j]=1;
-					while(judge[0]&&judge[1]&&judge[2]&&judge[3]&&judge[4])
-					{
-						printf(output_table[i]);
-						UART_putstring(output_table[i]);
-						_delay_ms(1000);
-					}
-				}
+				Morse[a] = 2;
+				judge[a] = 0;
 			}
-		}	
-
-		
+			read = 0;
+			_delay_ms(2000);
 			
+		}	
+				
     }
 }
